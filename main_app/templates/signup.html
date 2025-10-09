@@ -13,9 +13,14 @@
 {% endif %}
 <form action="" method="post" class="form-container" autocomplete="off">
   {% csrf_token %}
-  <table>
-    {{ form.as_table }}
-  </table>
+  <label for="username">Username:</label>
+  <input type="text" name="username" id="username" required>
+
+  <label for="password1">Password:</label>
+  <input type="password" name="password1" id="password1" required>
+
+  <label for="password2">Confirm Password:</label>
+  <input type="password" name="password2" id="password2" required>
   <button type="submit" class="btn submit">Submit!</button>
 </form>
 

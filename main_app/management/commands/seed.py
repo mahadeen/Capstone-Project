@@ -2,6 +2,8 @@ from django.core.management.base import BaseCommand
 from main_app.models import Client, Account, Transaction
 import random
 from datetime import datetime, timedelta
+from django.contrib.auth.hashers import make_password
+
 
 class Command(BaseCommand):
     def handle(self, *args, **kwargs):
@@ -14,8 +16,8 @@ class Command(BaseCommand):
             first_name="Abd",
             last_name="Mahadeen",
             username="mahadeen",
-            password="1234",
-            created_at=datetime.now()
+            password=make_password("1234"),
+            date_joined=datetime.now()
         )
         
         account1 = Account.objects.create(

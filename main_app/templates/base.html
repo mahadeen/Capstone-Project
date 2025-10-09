@@ -9,28 +9,25 @@
     <link rel="shortcut icon" type="image/png" href="" />
     <title>Pacific Bank</title>
     <link rel="stylesheet" href="{% static 'css/base.css' %}" />
-    <link
+    {% comment %} <link
       rel="shortcut icon"
       type="image/png"
       href="{% static 'images/bank-icon-white.svg' %}"
-    />
+    /> {% endcomment %}
     {% block head %} 
     {% endblock %}
   </head>
   <body>
     <header>
       <div class="header-logo-container">
-        <a href="/">
+        {% comment %} <a href="/">
           <img src="{% static 'images/bank-icon-white.svg' %}" alt="Pacific Bank Logo" />
-        </a>
+        </a> {% endcomment %}
       </div>
   <nav>
     <ul>
       {% if user.is_authenticated %}
-        <li><a href="{% url 'cat-index' %}">All Cats</a></li>
-        <li><a href="{% url 'toy-index' %}">All Toys</a></li>
-        <li><a href="{% url 'cat-create' %}">Add a Cat</a></li>
-        <li><a href="{% url 'toy-create' %}">Add a Toy</a></li>
+        <li><a href="{% url 'accounts-index' %}">All Accounts</a></li>
         <li><a href="{% url 'about' %}">About</a></li>
           <li>
             <form id="logout-form" method="post" action="{% url 'logout' %}">

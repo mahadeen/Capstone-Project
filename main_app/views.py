@@ -11,8 +11,8 @@ from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-
-# Import HttpResponse to send text-based responses
+from main_app.models import Client
+from django.contrib.auth.hashers import make_password
 from django.http import HttpResponse
 
 class Home(LoginView):
@@ -30,7 +30,7 @@ def about(request):
     return render(request, 'about.html')
 
 @login_required
-class Account(LoginRequiredMixin):
+class AccountView(LoginRequiredMixin):
     def __init__(self, account_type, created_at, balance, client_id):
         self.account_type = account_type
         self.created_at = created_at
@@ -39,22 +39,32 @@ class Account(LoginRequiredMixin):
 
 @login_required
 def accounts_index(request):
-    # accounts = Account.objects.filter()
-    # return render(request, 'accounts/index.html', {'accounts': accounts})
-    pass
+    accounts = Account.objects.filter(client=request.user)
+    return render(request, 'accounts/index.html', {'accounts': accounts})
+    
 
 def signup(request):
     error_message = ''
     if request.method == 'POST':
         # This is how to create a 'user' form object
         # that includes the data from the browser
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            # This will add the user to the database
-            user = form.save()
+
+        username = request.POST.get('username')
+        password1 = request.POST.get('password1')
+        password2 = request.POST.get('password2')
+
+        matches = password1 == password2 and password1 != "" and password1 != None and username != "" and username != None and len(password1) > 3
+
+        existing = Client.objects.filter(username = username)
+
+        is_unique = len(existing) == 0
+        
+        if is_unique == True and matches == True: 
+            client = Client.objects.create(username = username, password = make_password(password1))
+            
             # This is how we log a user in
-            login(request, user)
-            return redirect('accounts')
+            login(request, client)
+            return redirect('accounts-index')
         else:
             error_message = 'Invalid sign up - try again'
     # A bad POST or a GET request, so render signup.html with an empty form
@@ -67,4 +77,3 @@ def signup(request):
     #     'signup.html',
     #     {'form': form, 'error_message': error_message}
     # )
-    

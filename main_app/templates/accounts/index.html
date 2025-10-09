@@ -34,14 +34,10 @@
           src="{% static 'images/sk8r-boi-cat.svg' %}"
           alt="A skater boy cat"
         />
-      </div>
-      <h2 class="card-title">{{ account.name }}</h2>
-      {% if cat.age > 0 %}
-      <p>A {{ cat.age }} year old {{ cat.breed }}</p>
-      {% else %}
-      <p>A {{ cat.breed }} kitten.</p>
-      {% endif %}
-      <p><small>{{ cat.description }}</small></p>
+    </div>
+      <h2 class="card-title">Account ID: {{ account.id }}</h2>
+      <p>Account type: {{ account.account_type }}</p>
+      <p>Balance: ${{ account.balance }}</p>
     </div>
   </div>
   {% endfor %}
