@@ -1,0 +1,31 @@
+{% extends 'base.html' %} 
+{% load static %} 
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/form.css' %}" />
+{% endblock %} 
+{% block content %}
+
+<div class="page-header">
+  <!-- Using the generic 'object' variable -->
+  {% if object %}
+    <h1>Edit {{ object.account_type }}</h1>
+  {% else %}
+    <h1>Create an account</h1>
+  {% endif %}
+</div>
+
+<form action="{% url 'create-account' %}" method="post" class="form-container" autocomplete="off">
+{% csrf_token %}
+
+    <select id="account_type" name="account_type" required>
+    <option value="Savings">Savings</option>
+    <option value="Checking">Checking</option>
+    </select>
+
+    {% comment %} <label for="account_type">Account Type:</label>
+    <input type="text" name="account_type" id="account_type" required> {% endcomment %}
+
+  <button type="submit" class="btn submit">Submit</button>
+</form>
+
+{% endblock %}

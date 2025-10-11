@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from main_app.models import Account
+from main_app.models import Client, Account, Transaction
 from main_app.services.transaction_engine import TransactionService
 import json
 from django.http import HttpResponse
@@ -11,9 +11,12 @@ from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from main_app.models import Client
 from django.contrib.auth.hashers import make_password
 from django.http import HttpResponse
+from datetime import datetime, timedelta
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+
+
 
 class Home(LoginView):
     template_name = 'home.html'
@@ -77,3 +80,39 @@ def signup(request):
     #     'signup.html',
     #     {'form': form, 'error_message': error_message}
     # )
+
+@login_required
+def create_account(request):
+    print(request.POST.dict())
+    account_type = request.POST.get('account_type')
+    valid_type = account_type == Account.AccountType.SAVINGS or account_type == Account.AccountType.CHECKING
+    if valid_type == False:
+        return render (request, 'account_form.html')
+
+    error_message = ''
+    if request.method == 'POST':
+        account = Account.objects.create(
+        client=request.user,
+        account_type = account_type,
+        balance = 0,
+        )
+        return redirect('accounts-index')
+    else:
+        error_message = 'Invalid - try again'
+
+@login_required
+def account_form(request):
+    accounts = Account.objects.filter(client=request.user)
+    return render(request, 'account_form.html')
+
+
+@login_required
+def t_history(request):
+    origin_trans = Transaction.objects.filter(
+        origin_account__client=request.user
+    )
+    destination_trans = Transaction.objects.filter(
+        destination_account__client=request.user
+    )
+    all_transactions = origin_trans.union(destination_trans)
+    return render(request, 'accounts/t-history.html', {'transactions': all_transactions})
