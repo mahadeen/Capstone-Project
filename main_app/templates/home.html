@@ -5,24 +5,22 @@
 />
 {% endblock %} {% block content %}
 
-<section class="logo-container">
-  <div class="accounts-container">
-    <img
-      src="{% static 'images/splash.svg' %}"
-      alt="The Cat Collector Cat"
-    />
-  </div>
-</section>
-
-{% if not user.is_authenticated %}
-  <section>
-    <form action="{% url 'home' %}" method="post" class="login">
-      <h1>Login</h1>
-      {% csrf_token %} {{ form.as_p }}
-      <input type="hidden" name="next" value="{{ next }}" />
-      <button type="submit" class="btn submit">Login</button>
-    </form>
+<div class="login-page">
+  <section class="logo-container">
+    <img src="{% static 'images/Amber-Bank-3.png' %}" alt="Amber Bank Logo"/>
   </section>
-{% endif %}
+
+  {% if not user.is_authenticated %}
+    <section class="login-section">
+      <form action="{% url 'home' %}" method="post" class="login">
+        <h1>Login</h1>
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="hidden" name="next" value="{{ next }}" />
+        <button type="submit" class="btn submit">Login</button>
+      </form>
+    </section>
+  {% endif %}
+</div>
 
 {% endblock %}

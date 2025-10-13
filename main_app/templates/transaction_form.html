@@ -1,0 +1,42 @@
+{% extends 'base.html' %} 
+{% load static %} 
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/form.css' %}"/>
+{% endblock %} 
+{% block content %}
+
+<!-- transaction_form.html -->
+<form method="get" action="{% url 'transaction_form' %}">
+  <label for="transaction_type">Transaction type:</label>
+  <select name="transaction_type" id="transaction_type" onchange="this.form.submit()">
+    <option value="">-- Select --</option>
+    <option value="Deposit" {% if transaction_type == "Deposit" %}selected{% endif %}>Deposit</option>
+    <option value="Withdrawal" {% if transaction_type == "Withdrawal" %}selected{% endif %}>Withdrawal</option>
+    <option value="Transfer" {% if transaction_type == "Transfer" %}selected{% endif %}>Transfer</option>
+  </select>
+</form>
+
+<form action="{% url 'initiate_transaction' %}" method="post">
+  {% csrf_token %}
+  <input type="hidden" name="transaction_type" value="{{ transaction_type }}">
+  {% if transaction_type %}
+    <label for="amount">Amount:</label>
+    <input type="number" name="amount" required>
+
+    {% if transaction_type != "Deposit" %}
+      <label for="origin_account">Transfer from:</label>
+      <input type="number" name="origin_account">
+    {% endif %}
+
+    {% if transaction_type != "Withdrawal" %}
+      <label for="destination_account">Transfer to:</label>
+      <input type="number" name="destination_account">
+    {% endif %}
+
+    <label for="description">Description:</label>
+    <input type="text" name="description">
+    <button type="submit">Submit</button>
+  {% endif %}
+</form>
+
+{% endblock %}

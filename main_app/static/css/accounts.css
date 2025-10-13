@@ -1,0 +1,113 @@
+/* ========== PAGE HEADER ========== */
+.page-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.page-header h1 {
+  font-size: 1.8rem;
+  color: #002d62; /* same navy color as header */
+  margin-bottom: 0.5rem;
+}
+
+.page-header .btn.create {
+  background-color: #0066cc;
+  color: #fff;
+  margin: 0.25rem 0;
+  font-weight: 600;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  transition: background 0.2s ease;
+}
+
+.page-header .btn.create:hover {
+  background-color: #005bb5;
+}
+
+/* ========== ACCOUNT CONTAINER ========== */
+.account-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Card style */
+.card {
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+.card-content {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* Card image */
+.card-img-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+}
+
+.card-img-container img {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+}
+
+/* Card text */
+.card-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #002d62;
+  margin-bottom: 0.25rem;
+}
+
+.card p {
+  font-size: 1rem;
+  color: #333;
+  margin-bottom: 0.25rem;
+}
+
+/* ========== RESPONSIVE DESIGN ========== */
+@media (min-width: 600px) {
+  .page-header {
+    flex-direction: row;
+    justify-content: space-between;
+    text-align: left;
+  }
+
+  .page-header .btn.create {
+    margin: 0 0.5rem;
+  }
+
+  .account-container {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .card {
+    flex: 1 1 calc(50% - 1rem);
+  }
+}
+
+@media (min-width: 992px) {
+  .card {
+    flex: 1 1 calc(33% - 1rem);
+  }
+}

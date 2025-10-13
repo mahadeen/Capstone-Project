@@ -49,8 +49,6 @@ def accounts_index(request):
 def signup(request):
     error_message = ''
     if request.method == 'POST':
-        # This is how to create a 'user' form object
-        # that includes the data from the browser
 
         username = request.POST.get('username')
         password1 = request.POST.get('password1')
@@ -64,22 +62,15 @@ def signup(request):
         
         if is_unique == True and matches == True: 
             client = Client.objects.create(username = username, password = make_password(password1))
-            
-            # This is how we log a user in
+
             login(request, client)
             return redirect('accounts-index')
         else:
             error_message = 'Invalid sign up - try again'
-    # A bad POST or a GET request, so render signup.html with an empty form
     form = UserCreationForm()
     context = {'form': form, 'error_message': error_message}
     return render(request, 'signup.html', context)
-    # Same as: 
-    # return render(
-    #     request, 
-    #     'signup.html',
-    #     {'form': form, 'error_message': error_message}
-    # )
+
 
 @login_required
 def create_account(request):
@@ -119,15 +110,18 @@ def t_history(request):
 
 @login_required
 def transaction_form(request):
-
-    return render(request, 'transaction_form.html')
+    transaction_type = request.GET.get('transaction_type')
+    return render(request, 'transaction_form.html', {'transaction_type': transaction_type})
 
 @login_required
 def initiate_transaction(request):
-    error_message = ''
     if request.method == 'POST':
 
         transaction_type = request.POST.get('transaction_type')
+        if not transaction_type:
+            return render(request, 'transaction_form.html', {
+                'error_message': 'Transaction type is required.'
+            })
         amount = request.POST.get('amount')
         amount = int(amount)
         origin_account = request.POST.get('origin_account')
@@ -142,6 +136,11 @@ def initiate_transaction(request):
             destination_account = int(destination_account)
             origin_account = Account.objects.get(id=origin_account)
             destination_account = Account.objects.get(id=destination_account)
+            
+            if valid:
+                transaction = TransactionService.transfer(origin_account, destination_account, amount, description)
+                return redirect('accounts-index')
+            return render(request, 'transaction_form.html')
 
         elif transaction_type == Transaction.TransactionTypes.DEPOSIT:
             if destination_account:
@@ -160,3 +159,9 @@ def initiate_transaction(request):
                     transaction = TransactionService.withdraw(account=origin_account, amount=amount, description=description)
                     return redirect('accounts-index')
             return render(request, 'transaction_form.html')
+        
+    #     return render(request, 'transaction_form.html', {
+    #         'error_message': 'Invalid transaction type or missing input.'
+    #     })
+        
+    # return render(request, 'transaction_form.html')
