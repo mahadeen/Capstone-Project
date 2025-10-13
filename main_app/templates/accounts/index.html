@@ -1,39 +1,20 @@
 {% extends 'base.html' %} {% load static %} {% block head %}
-<link
-  rel="stylesheet"
-  href="{% static 'css/cats/cat-index.css' %}"
-/>
+
+<link rel="stylesheet" href="{% static 'css/base.css' %}" />
+<link rel="stylesheet" href="{% static 'css/accounts.css' %}" />
+
 {% endblock %} {% block content %}
 
 <section class="page-header">
   <h1>Account list</h1>
-  <img
-    src="{% static 'images/cool-cat.svg' %}"
-    alt="first account"
-  />
-  <img
-    src="{% static 'images/happy-cat.svg' %}"
-    alt="second account"
-  />
-  <img
-    src="{% static 'images/teacup-cat.svg' %}"
-    alt="third account"
-  />
-  <img
-    src="{% static 'images/cat-in-box.svg' %}"
-    alt="fourth account"
-  />
   <a href="{% url 'account_form' %}" class="btn create">Create Account</a>
+  <a href="{% url 'transaction_form' %}" class="btn create">Initiate transaction</a>
 </section>
 <section class="account-container">
   {% for account in accounts %}
   <div class="card">
     <div class="card-content">
       <div class="card-img-container">
-        <img
-          src="{% static 'images/sk8r-boi-cat.svg' %}"
-          alt="A skater boy cat"
-        />
     </div>
       <h2 class="card-title">Account ID: {{ account.id }}</h2>
       <p>Account type: {{ account.account_type }}</p>
@@ -42,7 +23,5 @@
   </div>
   {% endfor %}
 </section>
-
-
 
 {% endblock %}

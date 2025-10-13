@@ -20,6 +20,9 @@ class TransactionService:
                 created_at = datetime.now(),
                 description = description,
             )
+        
+    @staticmethod
+    @transaction.atomic
     def withdraw(account: Account, amount: float, description: str = "") -> Transaction:
         if amount < 0:
             return None
@@ -34,6 +37,9 @@ class TransactionService:
                 created_at = datetime.now(),
                 description = description,
             )
+    
+    @staticmethod
+    @transaction.atomic
     def transfer(origin_account: Account, destination_account: Account,
                     amount: float, description: str = "") -> Transaction:
         if amount < 0:
@@ -54,3 +60,4 @@ class TransactionService:
                 created_at = datetime.now(),
                 description = description,
             )
+        

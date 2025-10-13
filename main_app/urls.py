@@ -10,4 +10,6 @@ urlpatterns = [
     path('accounts/create/', views.create_account, name="create-account"),
     path('account_form', views.account_form, name="account_form"),
     path('t_history', views.t_history, name="t_history"),
+    path('transaction_form', views.transaction_form, name="transaction_form"),
+    path('initiate_transaction', views.initiate_transaction, name="initiate_transaction"),
 ]

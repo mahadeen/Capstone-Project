@@ -116,3 +116,47 @@ def t_history(request):
     )
     all_transactions = origin_trans.union(destination_trans)
     return render(request, 'accounts/t-history.html', {'transactions': all_transactions})
+
+@login_required
+def transaction_form(request):
+
+    return render(request, 'transaction_form.html')
+
+@login_required
+def initiate_transaction(request):
+    error_message = ''
+    if request.method == 'POST':
+
+        transaction_type = request.POST.get('transaction_type')
+        amount = request.POST.get('amount')
+        amount = int(amount)
+        origin_account = request.POST.get('origin_account')
+        destination_account = request.POST.get('destination_account')
+        description = request.POST.get('description')
+        valid = amount > 0
+        if transaction_type == Transaction.TransactionTypes.TRANSFER:
+            if not origin_account or not destination_account:
+                return render(request, 'transaction_form.html')
+
+            origin_account = int(origin_account)
+            destination_account = int(destination_account)
+            origin_account = Account.objects.get(id=origin_account)
+            destination_account = Account.objects.get(id=destination_account)
+
+        elif transaction_type == Transaction.TransactionTypes.DEPOSIT:
+            if destination_account:
+                destination_account = int(destination_account)
+                destination_account = Account.objects.get(id=destination_account)
+                if valid:
+                    transaction = TransactionService.deposit(account=destination_account, amount=amount, description=description)
+                    return redirect('accounts-index')
+            return render(request, 'transaction_form.html')
+            
+        elif transaction_type == Transaction.TransactionTypes.WITHDRAWAL:
+            if origin_account:
+                origin_account = int(origin_account)
+                origin_account = Account.objects.get(id=origin_account)
+                if valid:
+                    transaction = TransactionService.withdraw(account=origin_account, amount=amount, description=description)
+                    return redirect('accounts-index')
+            return render(request, 'transaction_form.html')
