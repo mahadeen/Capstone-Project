@@ -18,8 +18,25 @@
       <p>Amount: ${{ transaction.amount }}</p>
       <p>Created at: {{ transaction.created_at }}</p>
       <p>Transaction type: {{ transaction.type }}</p>
-      <p>Origin account ID: {{ transaction.origin_account_id }}</p>
-      <p>Destination account ID: {{ transaction.destination_account_id }}</p>
+
+      <p>
+        Origin account ID:
+        {% if transaction.origin_account %}
+          {{ transaction.origin_account.id }} ({{ transaction.origin_account.account_type }})
+        {% else %}
+          External Source (ATM Deposit)
+        {% endif %}
+      </p>
+
+      <p>
+        Destination account ID:
+        {% if transaction.destination_account %}
+          {{ transaction.destination_account.id }} ({{ transaction.destination_account.account_type }})
+        {% else %}
+          Internal Destination (ATM Withdrawal)
+        {% endif %}
+      </p>
+
       <p>Description: {{ transaction.description }}</p>
       <p>Status: {{ transaction.status }}</p>
     </div>
