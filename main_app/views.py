@@ -21,9 +21,10 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 class Home(LoginView):
     template_name = 'home.html'
 
+
 @csrf_exempt
 @login_required
-def deposit_view(request):
+def deposit_view(request): # for testing purposes.
     account1 = Account.objects.get(id=2)
     account2 = Account.objects.get(id=3)
     TransactionService.transfer(account1, account2, 50, "test")
