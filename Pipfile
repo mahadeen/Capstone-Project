@@ -1,0 +1,28 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+asgiref = "==3.10.0"
+certifi = "==2025.10.5"
+distlib = "==0.4.0"
+filelock = "==3.19.1"
+packaging = "==25.0"
+pipenv = "==2025.0.4"
+platformdirs = "==4.4.0"
+sqlparse = "==0.5.3"
+typing-extensions = "==4.15.0"
+virtualenv = "==20.35.3"
+django = "*"
+psycopg2-binary = "*"
+gunicorn = "*"
+dj-database-url = "*"
+python-dotenv = "*"
+whitenoise = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.9"
+python_full_version = "3.9.6"
