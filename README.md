@@ -100,25 +100,23 @@ Feature Documentation:
 
 Challenges encountered and solutions applied:
 
-    1- user: 
-        I created a user myself, then found out that I had to use Django auth, then I had it inherit class Client(AbstractUser)
-        which has an unhashed password and then I used makepassword() to hash it so that Django would accept it.
+	1.	Custom User Model:
+        Initially I created a user model manually, then realized Django’s authentication system must be extended properly. I refactored it to inherit from Class Client(AbstractUser), which stored unhashed passwords at first, then used make_password() to hash them correctly.
 
-    2- hiding invalid fields when selecting transaction type:
+	2.	Hiding Unnecessary Fields by Transaction Type:
+        Implemented conditional logic to dynamically hide or disable irrelevant fields based on the selected transaction type.
 
-    3- ERD: thought about having 1:1 for accounts and clients but what if a client has more than one account? Also, transactions were saved in their own table to keep history, so that I could have a validtion method of balances for any account by summing up all the transactions, to have one source of truth.
+    3.	Database Design (ERD):
+        Initially considered a 1:1 relation between Client and Account, but changed it to one-to-many to allow multiple accounts per client. Transactions were stored in a separate table to maintain a complete history and serve as a single source of truth for balance validation.
 
-    4- Using engines/services: Instead of having all of the busniess logic happening in views.py floating around, I can just change them in one place and the changes would take effect whereever they're referenced. Planning on doing that for accounts in the future as I've only done it for transactions for now (using transaction_engine).
+    4.	Engines / Service Layer:
+        Moved business logic from views.py into dedicated service modules to keep the code organized. Implemented this for transactions (transaction_engine), with plans to extend it to accounts.
 
-    5- utilizing enum-like behaviour: enums are hard to work with Django migration databases, so instead of having the transaction types as plain strings, I created classes that behave like enums would, so that for example I could change "Deposit" to "deposit" in one place and not have to change it anywhere else.
+	5.	Enum-like Behavior for Transaction Types:
+        Since native enums conflict with Django migrations, created Python classes that mimic enum behavior. This allows centralized control over transaction type strings without breaking database compatibility.
 
-    E.g.
-    
-    class TransactionTypes:
-        DEPOSIT = "Deposit"
-        WITHDRAWAL = "Withdrawal"
-        TRANSFER = "Transfer"
+	6.	Understanding save() vs create():
+        Learned that Model.save() writes data to the database, while methods like Model.objects.create() both instantiate and save. This clarified the difference between Python objects in memory and database records.
 
-    6- Save() vs create(): Managed to understand the difference between normal python objects in memory and the data in the database, and that using Django, model.objects."something()", this allows me to deal with the database or create soomething in the database. Also, Model.save() is what actually writes in the database
-
-    7- Atomic transactions: This means that if one of a sequence of steps fails, the rest of the steps will rollback, and can do this using the @atomic decorator.
+	7.	Atomic Transactions:
+        Implemented @transaction.atomic to ensure that a sequence of related operations either all succeed or all rollback, preserving data integrity during complex transactions.
